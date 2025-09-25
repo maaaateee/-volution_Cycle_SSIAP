@@ -1,40 +1,133 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Projet d'Évolution du Cycle de Travail SSIAP</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation Projet 24h - Direction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
             margin: 0;
             padding: 0;
-            overflow: hidden;
         }
-        .slide {
-            width: 1280px;
+        
+        .slide-container {
+            max-width: 1280px;
             min-height: 720px;
-            position: relative;
+            margin: 2rem auto;
             background-color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 8px;
             overflow: hidden;
+            display: none;
+            flex-direction: column;
+            position: relative;
         }
+        
+        .slide-container.active {
+            display: flex;
+        }
+        
+        .slide-content {
+            flex-grow: 1;
+            padding: 2.5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 720px;
+        }
+        
         .adp-blue { color: #004985; }
         .adp-red { color: #CC0033; }
+        .adp-green { color: #22c55e; }
         .bg-adp-blue { background-color: #004985; }
         .bg-adp-red { background-color: #CC0033; }
-        .footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            padding: 20px 40px;
+        
+        .slide-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-bottom: 1rem;
         }
+        
+        .slide-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            position: relative;
+        }
+        
+        .pagination {
+            position: absolute;
+            right: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 73, 133, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #004985;
+        }
+        
+        #prevBtn {
+            left: 20px;
+        }
+        
+        #nextBtn {
+            right: 20px;
+        }
+        
+        .navigation-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 73, 133, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: flex;
+            gap: 10px;
+            z-index: 101;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-dot.active {
+            background-color: white;
+        }
+        
         .header-design {
             position: absolute;
             top: 0;
@@ -44,6 +137,7 @@
             background-color: #004985;
             clip-path: polygon(100% 0, 0% 0, 100% 100%);
         }
+        
         .bottom-design {
             position: absolute;
             bottom: 0;
@@ -53,44 +147,747 @@
             background-color: #CC0033;
             clip-path: polygon(0 100%, 100% 100%, 0 0);
         }
+
+        /* Animation pour l'icône fatiguée */
+        @keyframes zzz {
+            0%, 100% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-5px); }
+        }
+        
+        .zzz-animation::after {
+            content: "zzz";
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 12px;
+            color: #6b7280;
+            animation: zzz 2s infinite;
+        }
     </style>
 </head>
 <body>
-<div class="slide flex flex-col justify-center items-center">
-<!-- Éléments de design -->
-<div class="header-design"></div>
-<div class="bottom-design"></div>
-<!-- Logo ADP -->
-<div class="absolute top-8 right-8 w-32">
-<svg class="w-full" viewbox="0 0 100 30">
-<path d="M37.5,15c0,8.3-6.7,15-15,15s-15-6.7-15-15S14.2,0,22.5,0S37.5,6.7,37.5,15" fill="#004985"></path>
-<path d="M25.1,15c0,1.5-1.2,2.6-2.6,2.6s-2.6-1.2-2.6-2.6s1.2-2.6,2.6-2.6S25.1,13.5,25.1,15" fill="#FFFFFF"></path>
-<path d="M44.3,3.8h4.4l6.1,16.5h-4.2l-1.1-3.2h-6.1l-1.1,3.2h-4.2L44.3,3.8z M48.5,13.9l-2.1-6.1l-2.1,6.1H48.5z" fill="#004985"></path>
-<path d="M56.5,3.8h4.7l3.7,9.5l3.7-9.5h4.7v16.5h-3.9V8.2l-4.4,12.1h-0.2L60.4,8.2v12.1h-3.9V3.8z" fill="#004985"></path>
-<path d="M81.7,3.8h4.4l6.1,16.5H88l-1.1-3.2h-6.1l-1.1,3.2h-4.2L81.7,3.8z M85.9,13.9l-2.1-6.1l-2.1,6.1H85.9z" fill="#004985"></path>
-<path d="M94,3.8h3.9v16.5H94V3.8z" fill="#004985"></path>
-</svg>
-</div>
-<!-- Contenu principal -->
-<div class="text-center px-16 z-10">
-<h1 class="text-7xl font-extrabold adp-blue mb-8 tracking-tight leading-tight">
-                Projet d'Évolution du<br/>Cycle de Travail SSIAP
+
+    <!-- Navigation Buttons -->
+    <button id="prevBtn" class="nav-button">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <button id="nextBtn" class="nav-button">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+
+    <!-- Navigation Dots -->
+    <div class="navigation-bar" id="navBar">
+        <div class="nav-dot active" onclick="showSlide(0)"></div>
+        <div class="nav-dot" onclick="showSlide(1)"></div>
+        <div class="nav-dot" onclick="showSlide(2)"></div>
+        <div class="nav-dot" onclick="showSlide(3)"></div>
+        <div class="nav-dot" onclick="showSlide(4)"></div>
+        <div class="nav-dot" onclick="showSlide(5)"></div>
+        <div class="nav-dot" onclick="showSlide(6)"></div>
+        <div class="nav-dot" onclick="showSlide(7)"></div>
+        <div class="nav-dot" onclick="showSlide(8)"></div>
+        <div class="nav-dot" onclick="showSlide(9)"></div>
+    </div>
+
+    <!-- Diapositive 1: Titre -->
+    <div class="slide-container active" id="slide-0">
+        <div class="slide-content justify-center items-center text-center">
+            <!-- Éléments de design -->
+            <div class="header-design"></div>
+            <div class="bottom-design"></div>
+            
+            <!-- Logo ADP -->
+            <div class="absolute top-8 right-8 w-32">
+                <svg class="w-full" viewBox="0 0 100 30">
+                    <path d="M37.5,15c0,8.3-6.7,15-15,15s-15-6.7-15-15S14.2,0,22.5,0S37.5,6.7,37.5,15" fill="#004985"></path>
+                    <path d="M25.1,15c0,1.5-1.2,2.6-2.6,2.6s-2.6-1.2-2.6-2.6s1.2-2.6,2.6-2.6S25.1,13.5,25.1,15" fill="#FFFFFF"></path>
+                    <path d="M44.3,3.8h4.4l6.1,16.5h-4.2l-1.1-3.2h-6.1l-1.1,3.2h-4.2L44.3,3.8z M48.5,13.9l-2.1-6.1l-2.1,6.1H48.5z" fill="#004985"></path>
+                    <path d="M56.5,3.8h4.7l3.7,9.5l3.7-9.5h4.7v16.5h-3.9V8.2l-4.4,12.1h-0.2L60.4,8.2v12.1h-3.9V3.8z" fill="#004985"></path>
+                    <path d="M81.7,3.8h4.4l6.1,16.5H88l-1.1-3.2h-6.1l-1.1,3.2h-4.2L81.7,3.8z M85.9,13.9l-2.1-6.1l-2.1,6.1H85.9z" fill="#004985"></path>
+                    <path d="M94,3.8h3.9v16.5H94V3.8z" fill="#004985"></path>
+                </svg>
+            </div>
+            
+            <h1 class="text-7xl font-extrabold adp-blue mb-8 tracking-tight leading-tight">
+                Projet d'Évolution du<br>Cycle de Travail SSIAP
             </h1>
-<div class="w-48 h-2 bg-adp-red mx-auto my-10"></div>
-<p class="text-3xl text-gray-600 max-w-3xl mx-auto">
+            <div class="w-48 h-2 bg-adp-red mx-auto my-10"></div>
+            <p class="text-3xl text-gray-600 max-w-3xl mx-auto">
                 Transformer un risque opérationnel actuel en levier de performance RH et de fiabilité
             </p>
-</div>
-<!-- Footer -->
-<div class="footer">
-<span class="text-sm text-gray-500">Projet d'évolution SSIAP 24H - ADP</span>
-<div class="flex items-center">
-<div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
-<i class="fas fa-fire-extinguisher text-xs"></i>
-</div>
-<span class="text-lg font-semibold adp-blue">1 / 10</span>
-</div>
-</div>
-</div>
+            
+            <footer class="slide-footer w-full mt-20">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">1 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 2: Le Contexte -->
+    <div class="slide-container" id="slide-1">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">Le Contexte : Un Modèle Opérationnel et RH sous Tension</h2>
+                <span class="text-lg font-semibold adp-blue">2 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-6"></div>
+            <main class="flex-grow mt-4">
+                <p class="text-xl text-gray-700 mb-8 text-center">Aujourd'hui, notre service de sécurité incendie fait face à un <strong class="adp-blue">cercle vicieux systémique</strong> qui fragilise nos opérations :</p>
+                
+                <div class="relative h-[400px] w-full mt-10">
+                    <!-- Cercle en pointillés -->
+                    <svg class="absolute inset-0 w-full h-full" viewBox="0 0 500 400">
+                        <circle cx="250" cy="200" r="180" fill="none" stroke="#d1d5db" stroke-width="2" stroke-dasharray="8,8"/>
+                    </svg>
+                    
+                    <!-- Items -->
+                    <div class="absolute top-[10px] left-1/2 transform -translate-x-1/2 w-1/3 text-center">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-4 relative zzz-animation">
+                            <i class="fas fa-face-tired text-4xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Un Rythme Pénible (12h)</h3>
+                        <p class="text-gray-600 text-sm">Diminue l'attractivité de nos postes.</p>
+                    </div>
+                    
+                    <div class="absolute bottom-[20px] right-[5%] w-1/3 text-center">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-users-slash text-4xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Une Forte Instabilité RH</h3>
+                        <p class="text-gray-600 text-sm">Génère turnover élevé et absentéisme.</p>
+                    </div>
+                    
+                    <div class="absolute bottom-[20px] left-[5%] w-1/3 text-center">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-user-clock text-4xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Un Sous-Effectif Opérationnel</h3>
+                        <p class="text-gray-600 text-sm">Service en "mode dégradé"<br>(échantillon sur 6 mois à CDG 9 : <strong class="font-semibold">23%</strong> des vacations).</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-lg">
+                    <p class="text-lg text-amber-900"><i class="fas fa-exclamation-triangle mr-3"></i>Le <strong class="font-bold">coût pour ADP</strong> n'est pas seulement financier, il représente un <strong class="font-bold">risque direct pour la résilience et la fiabilité</strong> de notre sécurité incendie.</p>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">2 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 3: La Solution -->
+    <div class="slide-container" id="slide-2">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">La Solution : Une Évolution Maîtrisée et Déjà Pratiquée</h2>
+                <span class="text-lg font-semibold adp-blue">3 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-6"></div>
+            <main class="flex-grow mt-4">
+                <p class="text-xl text-gray-700 mb-12 text-center">Nous ne proposons pas une révolution, mais l'application d'une solution <strong class="adp-blue">déjà prévue, validée et pratiquée</strong> au sein de notre Groupe.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div class="text-center p-6 bg-sky-50 rounded-lg">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-file-signature text-4xl adp-blue"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Un Cadre Juridique Favorable</h3>
+                        <p class="text-gray-600">Le cycle de 24h est une dérogation autorisée par le manuel de gestion du personnel d'ADP (<strong class="font-semibold">RÉF DG/2005/2199, Art. 2.4.3</strong>).</p>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-sky-50 rounded-lg border-2 border-adp-blue">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-check-double text-4xl adp-blue"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Une Pratique Éprouvée chez ADP</h3>
+                        <p class="text-gray-600">Ce cycle est déjà en place avec succès au sein de deux services critiques : le <strong class="font-semibold">SMU</strong> et le <strong class="font-semibold">SSLIA</strong>.</p>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-sky-50 rounded-lg">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-award text-4xl adp-blue"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Un Alignement sur les Standards</h3>
+                        <p class="text-gray-600">Nous nous alignons sur les meilleures pratiques des <strong class="font-semibold">services de secours</strong> pour garantir la performance et la récupération.</p>
+                    </div>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">3 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 4: Réponses aux inquiétudes -->
+    <div class="slide-container" id="slide-3">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">Répondre aux Inquiétudes Passées : Notre Nouvelle Approche</h2>
+                <span class="text-lg font-semibold adp-blue">4 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-6"></div>
+            <main class="flex-grow mt-4 grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="flex flex-col space-y-4">
+                    <h3 class="text-xl font-bold adp-blue flex items-center">
+                        <i class="fas fa-balance-scale text-3xl text-red-600 mr-4"></i>Le Sujet de l'Inspection du Travail
+                    </h3>
+                    <div class="p-4 bg-gray-50 rounded-lg border-t-4 border-gray-200">
+                        <p class="font-semibold text-gray-700">Ce qui avait été évoqué :</p>
+                        <p class="text-gray-600 mt-1">Un ancien avis défavorable à une organisation H24 simple.</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border-t-4 border-green-200 flex-grow">
+                        <p class="font-semibold text-green-800">Notre Démarche Transparente et Validée :</p>
+                        <p class="text-gray-600 mt-1">Ce projet, centré sur un <strong class="font-semibold">Plan de Prévention de l'Hypovigilance</strong>, a été partagé en amont avec la Médecine du Travail et l'Inspection du Travail pour intégrer leurs préconisations et présenter un dossier robuste.</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col space-y-4">
+                    <h3 class="text-xl font-bold adp-blue flex items-center">
+                        <i class="fas fa-users-cog text-3xl text-red-600 mr-4"></i>L'Inquiétude sur la Mobilité Interne
+                    </h3>
+                    <div class="p-4 bg-gray-50 rounded-lg border-t-4 border-gray-200">
+                        <p class="font-semibold text-gray-700">L'inquiétude soulevée :</p>
+                        <p class="text-gray-600 mt-1">Que les agents, satisfaits de leur rythme, ne souhaitent plus évoluer au sein du Groupe.</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border-t-4 border-green-200 flex-grow">
+                        <p class="font-semibold text-green-800">Notre Analyse :</p>
+                        <p class="text-gray-600 mt-1">La comparaison avec le SSLIA, parfois évoquée, n'est pas pertinente. Contrairement à nos collègues qui travaillent en vase clos sur les pistes, nos agents sont intégrés au cœur de l'aérogare. Cette collaboration quotidienne avec tous les services est le premier moteur de la mobilité. En stabilisant nos équipes, nous créons un <strong class="font-semibold">vivier de talents fidélisés et exposés aux opportunités</strong> du Groupe.</p>
+                    </div>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">4 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 5: Bénéfices -->
+    <div class="slide-container" id="slide-4">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">Les Bénéfices Stratégiques pour ADP</h2>
+                <span class="text-lg font-semibold adp-blue">5 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-6"></div>
+            <main class="flex-grow mt-4 grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+                <div class="p-6 bg-sky-50 rounded-lg h-full">
+                    <h3 class="text-xl font-bold adp-blue mb-4 flex items-center">
+                        <i class="fas fa-users-viewfinder text-3xl adp-blue mr-4"></i>Stabilité et Attractivité RH
+                    </h3>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
+                        <li><strong class="font-semibold">Attractivité renforcée :</strong> un avantage concurrentiel majeur pour attirer et recruter les meilleurs profils.</li>
+                        <li><strong class="font-semibold">Fidélisation des compétences :</strong> amélioration de la qualité de vie, réduisant le turnover et les coûts associés.</li>
+                        <li><strong class="font-semibold">Motivation et Équité :</strong> regain de motivation générale et répartition plus juste des contraintes.</li>
+                    </ul>
+                </div>
+                
+                <div class="p-6 bg-sky-50 rounded-lg h-full">
+                    <h3 class="text-xl font-bold adp-blue mb-4 flex items-center">
+                        <i class="fas fa-shield-halved text-3xl adp-blue mr-4"></i>Fiabilité Opérationnelle Améliorée
+                    </h3>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
+                        <li><strong class="font-semibold">Baisse attendue de l'absentéisme :</strong> moins de fatigue chronique grâce à une meilleure récupération.</li>
+                        <li><strong class="font-semibold">Simplification des plannings</strong> et constitution d'équipes fixes, expertes et stables.</li>
+                    </ul>
+                </div>
+                
+                <div class="p-6 bg-sky-50 rounded-lg h-full">
+                    <h3 class="text-xl font-bold adp-blue mb-4 flex items-center">
+                        <i class="fas fa-hands-holding-circle text-3xl adp-green mr-4"></i>Alignement Stratégique et RSE
+                    </h3>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
+                        <li><strong class="font-semibold">Contribution au plan "PIONEER 2025"</strong> par la réduction de moitié de l'empreinte carbone des trajets.</li>
+                        <li>Renforcement de l'image d'ADP comme <strong class="font-semibold">employeur responsable</strong> et à l'écoute.</li>
+                    </ul>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">5 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 6: Levier économique -->
+    <div class="slide-container" id="slide-5">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">Le Levier Économique : Investir dans la Stabilité</h2>
+                <span class="text-lg font-semibold adp-blue">6 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-6"></div>
+            <main class="flex-grow mt-4">
+                <p class="text-xl text-center text-gray-700 mb-8">Le gain financier ne vient pas d'une réduction d'effectif, mais de l'<strong class="adp-blue">élimination des surcoûts générés par notre modèle actuel.</strong></p>
+                
+                <div class="flex items-center justify-center space-x-8">
+                    <div class="w-2/5 p-6 bg-red-50 border-2 border-red-200 rounded-lg">
+                        <h3 class="text-xl font-bold text-red-800 mb-4 text-center">Coûts de l'Instabilité Actuelle</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-user-minus mt-1 text-red-500 mr-3"></i>
+                                <div><strong class="font-semibold">Coût du Turnover :</strong> Frais de recrutement, d'intégration et de formation.</div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-calendar-times mt-1 text-red-500 mr-3"></i>
+                                <div><strong class="font-semibold">Coût de l'Absentéisme :</strong> Heures complémentaires, intérim, désorganisation.</div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-exclamation-circle mt-1 text-red-500 mr-3"></i>
+                                <div><strong class="font-semibold">Coût du Sous-Effectif :</strong> Gestion de crise permanente, risque opérationnel.</div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="text-5xl text-gray-300">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    
+                    <div class="w-2/5 p-6 bg-green-50 border-2 border-green-200 rounded-lg">
+                        <h3 class="text-xl font-bold text-green-800 mb-4 text-center">Gains de la Stabilité Future</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-user-plus mt-1 text-green-500 mr-3"></i>
+                                <div><strong class="font-semibold">Gain de Fidélisation :</strong> Réduction du turnover et des coûts associés.</div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-calendar-check mt-1 text-green-500 mr-3"></i>
+                                <div><strong class="font-semibold">Gain de Présence :</strong> Baisse attendue de l'absentéisme et des remplacements.</div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-shield-alt mt-1 text-green-500 mr-3"></i>
+                                <div><strong class="font-semibold">Gain de Fiabilité :</strong> Équipes complètes et couverture opérationnelle sereine.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
+                    <p class="text-lg text-blue-900 text-center">
+                        <i class="fas fa-lightbulb mr-3"></i>C'est un <strong class="font-bold">investissement dans nos équipes</strong> qui génère un retour financier direct en transformant des dépenses subies en performance durable.
+                    </p>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">6 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 7: Plan de Prévention -->
+    <div class="slide-container" id="slide-6">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">Notre Garantie : Le Plan de Prévention de l'Hypovigilance</h2>
+                <span class="text-lg font-semibold adp-blue">7 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-6"></div>
+            <main class="flex-grow mt-4">
+                <p class="text-xl text-center text-gray-700 mb-8">Le passage en 24h n'augmente pas le risque de fatigue, il le déplace et nous permet de le <strong class="adp-blue">gérer professionnellement.</strong></p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-4 bg-sky-50 rounded-lg">
+                        <h3 class="text-lg font-bold adp-blue mb-3 flex items-center">
+                            <i class="fas fa-clipboard-list text-2xl adp-blue mr-3"></i>Protocole Opérationnel
+                        </h3>
+                        <ul class="list-disc ml-5 text-gray-600 space-y-2 text-sm">
+                            <li>Répartition des missions sur 24h avec alternance activité/repos.</li>
+                            <li>Créneaux définis et obligatoires pour les repas et pauses.</li>
+                            <li>Aménagement d'espaces de repos dédiés (séparation H/F).</li>
+                            <li>Créneaux autorisés pour la sieste réparatrice.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 bg-sky-50 rounded-lg">
+                        <h3 class="text-lg font-bold adp-blue mb-3 flex items-center">
+                            <i class="fas fa-user-md text-2xl adp-blue mr-3"></i>Suivi Médical & Prévention
+                        </h3>
+                        <ul class="list-disc ml-5 text-gray-600 space-y-2 text-sm">
+                            <li>Suivi médical renforcé avec la médecine du travail.</li>
+                            <li>Formation à l'hygiène de vie et à la gestion du sommeil.</li>
+                            <li>Évaluation régulière de l'état de fatigue.</li>
+                            <li>Procédures d'alerte en cas de vigilance dégradée.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 bg-sky-50 rounded-lg">
+                        <h3 class="text-lg font-bold adp-blue mb-3 flex items-center">
+                            <i class="fas fa-tasks text-2xl adp-blue mr-3"></i>Indicateurs de Suivi
+                        </h3>
+                        <ul class="list-disc ml-5 text-gray-600 space-y-2 text-sm">
+                            <li>Taux d'incidents liés à la fatigue.</li>
+                            <li>Niveau de satisfaction des agents.</li>
+                            <li>Indicateurs de santé et sécurité : suivi de l'absentéisme, des <strong class="font-semibold">accidents de trajet</strong> et de la <strong class="font-semibold">somnolence au volant</strong>.</li>
+                            <li>Suivi du bien-être et des risques psychosociaux (RPS).</li>
+                            <li>Performance opérationnelle.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-gray-100 p-4 text-center rounded-lg">
+                    <p class="text-sm text-gray-600">Notre démarche s'appuie sur les recommandations de l'<strong class="font-semibold">INRS</strong> (Institut National de Recherche et de Sécurité) pour garantir les meilleures pratiques en santé et sécurité au travail.</p>
+                </div>
+                
+                <div class="mt-4 bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+                    <p class="text-md text-amber-900 text-center">
+                        <i class="fas fa-bullseye mr-3"></i>L'objectif : garantir un <strong class="font-bold">niveau de vigilance supérieur</strong> au système actuel, fragilisé par la fatigue chronique.
+                    </p>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">7 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 8: Méthode Pilote -->
+    <div class="slide-container" id="slide-7">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">Notre Méthode : Le Déploiement par Projet Pilote</h2>
+                <span class="text-lg font-semibold adp-blue">8 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-6"></div>
+            <main class="flex-grow mt-4 flex flex-col">
+                <p class="text-xl text-center text-gray-700 mb-8">Nous proposons une approche mesurée et sans risque : un projet pilote sur <strong class="adp-blue">4 à 6 mois</strong>, basé sur le volontariat. Ce pilote est une nécessité opérationnelle pour couvrir les 3 postes du secteur et requiert <strong class="adp-blue">19 agents</strong>. La sélection visera à constituer un panel homogène et représentatif (sexe, expérience, réticences...) pour garantir l'objectivité des résultats.</p>
+                
+                <div class="relative">
+                    <div class="absolute top-12 left-[12.5%] w-3/4 h-0.5 bg-gray-200"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                        <div class="text-center">
+                            <div class="mx-auto w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mb-3 border-4 border-white">
+                                <i class="fas fa-vial text-4xl adp-blue"></i>
+                            </div>
+                            <h3 class="text-lg font-bold adp-blue mb-2">Tester</h3>
+                            <p class="text-gray-600 text-sm">Valider le modèle en conditions réelles et éprouver le Plan de Prévention de l'Hypovigilance.</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="mx-auto w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mb-3 border-4 border-white">
+                                <i class="fas fa-ruler-combined text-4xl adp-blue"></i>
+                            </div>
+                            <h3 class="text-lg font-bold adp-blue mb-2">Mesurer</h3>
+                            <p class="text-gray-600 text-sm">Évaluer l'amélioration de la QVT et la satisfaction des agents et des services associés (managers, RH...).</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="mx-auto w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mb-3 border-4 border-white">
+                                <i class="fas fa-chart-line text-4xl adp-blue"></i>
+                            </div>
+                            <h3 class="text-lg font-bold adp-blue mb-2">Quantifier</h3>
+                            <p class="text-gray-600 text-sm">Chiffrer les gains (baisse du turnover, absentéisme) et les indicateurs de suivi (diapo 7) pour valider le ROI.</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="mx-auto w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mb-3 border-4 border-white">
+                                <i class="fas fa-wrench text-4xl adp-blue"></i>
+                            </div>
+                            <h3 class="text-lg font-bold adp-blue mb-2">Ajuster</h3>
+                            <p class="text-gray-600 text-sm">Adapter les protocoles grâce au retour d'expérience avant d'envisager une généralisation.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-green-50 border-l-4 border-green-400 p-6 rounded-r-lg">
+                    <p class="text-lg text-green-900 text-center">
+                        <i class="fas fa-lock mr-3"></i>Cette démarche professionnelle <strong class="font-bold">dé-risque complètement le projet</strong> et garantit une décision finale basée sur des données factuelles.
+                    </p>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">8 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 9: Prérequis -->
+    <div class="slide-container" id="slide-8">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">Les Prérequis : Un Investissement Logistique Ciblé</h2>
+                <span class="text-lg font-semibold adp-blue">9 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-6"></div>
+            <main class="flex-grow mt-4 flex flex-col">
+                <p class="text-xl text-center text-gray-700 mb-12">La réussite du projet nécessite l'aménagement de locaux à sommeil équipés de lits et de sanitaires pour garantir le bien-être et la performance des agents.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div class="text-center p-6 bg-sky-50 rounded-lg">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-building-circle-check text-4xl adp-blue"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Faisabilité Validée</h3>
+                        <p class="text-gray-600">L'analyse des plans de nos PCS, <strong class="font-semibold">que nous tenons à votre disposition</strong>, confirme que les surfaces nécessaires sont disponibles.</p>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-sky-50 rounded-lg">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-piggy-bank text-4xl adp-blue"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Investissement Raisonné</h3>
+                        <p class="text-gray-600">Il s'agit d'un coût ponctuel, à mettre en balance avec les économies annuelles récurrentes générées par le projet.</p>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-sky-50 rounded-lg">
+                        <div class="mx-auto w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-location-dot text-4xl adp-blue"></i>
+                        </div>
+                        <h3 class="text-xl font-bold adp-blue mb-2">Opportunité du Site Pilote</h3>
+                        <p class="text-gray-600">Le Terminal S4 dispose déjà d'<strong class="font-semibold">espaces de repos, de vestiaires et de douches séparés Homme/Femme</strong>, minimisant l'investissement initial.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-12 bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-lg">
+                    <p class="text-lg text-amber-900 text-center">
+                        <i class="fas fa-info-circle mr-3"></i>Cet aménagement n'est pas une dépense de confort, c'est l'investissement qui conditionne la <strong class="font-bold">garantie d'une sécurité opérationnelle optimale.</strong>
+                    </p>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">9 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Diapositive 10: Conclusion -->
+    <div class="slide-container" id="slide-9">
+        <div class="slide-content">
+            <header class="slide-header">
+                <h2 class="text-3xl font-bold adp-blue">Conclusion & Prochaines Étapes</h2>
+                <span class="text-lg font-semibold adp-blue">10 / 10</span>
+            </header>
+            <div class="w-20 h-1.5 bg-adp-red my-4"></div>
+            <main class="flex-grow mt-4 flex flex-col">
+                <div class="flex flex-1">
+                    <div class="w-2/3 pr-8">
+                        <h3 class="text-2xl font-semibold adp-blue mb-4">Synthèse des bénéfices</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-sky-50 rounded-lg transition-all hover:shadow-lg">
+                                <h4 class="font-bold adp-blue mb-2 flex items-center">
+                                    <i class="fas fa-heart-pulse text-xl adp-blue mr-3"></i>Pour les agents
+                                </h4>
+                                <ul class="list-disc ml-6 text-gray-700 space-y-1 text-sm">
+                                    <li>Amélioration de la QVT</li>
+                                    <li>Gain de pouvoir d'achat (trajets / 2)</li>
+                                    <li>Meilleure conciliation vie pro/perso</li>
+                                    <li>Motivation accrue</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="p-4 bg-sky-50 rounded-lg transition-all hover:shadow-lg">
+                                <h4 class="font-bold adp-blue mb-2 flex items-center">
+                                    <i class="fas fa-building text-xl adp-blue mr-3"></i>Pour l'entreprise
+                                </h4>
+                                <ul class="list-disc ml-6 text-gray-700 space-y-1 text-sm">
+                                    <li>Levier d'attractivité et de fidélisation</li>
+                                    <li>Baisse des coûts (turnover, absentéisme)</li>
+                                    <li>Stabilité des équipes & gestion RH simple</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="p-4 bg-sky-50 rounded-lg transition-all hover:shadow-lg">
+                                <h4 class="font-bold adp-blue mb-2 flex items-center">
+                                    <i class="fas fa-fire-extinguisher text-xl adp-blue mr-3"></i>Opérationnels
+                                </h4>
+                                <ul class="list-disc ml-6 text-gray-700 space-y-1 text-sm">
+                                    <li>Maintien du haut niveau de sécurité</li>
+                                    <li>Continuité de service renforcée</li>
+                                    <li>Cohésion d'équipe améliorée</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="p-4 bg-sky-50 rounded-lg transition-all hover:shadow-lg">
+                                <h4 class="font-bold adp-blue mb-2 flex items-center">
+                                    <i class="fas fa-leaf text-xl adp-blue mr-3"></i>Économiques & RSE
+                                </h4>
+                                <ul class="list-disc ml-6 text-gray-700 space-y-1 text-sm">
+                                    <li>Optimisation des coûts (recrutement...)</li>
+                                    <li>Réduction de l'empreinte carbone</li>
+                                    <li>Image d'employeur responsable</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-1/3 pl-8 border-l border-gray-200 flex flex-col">
+                        <h3 class="text-2xl font-semibold adp-blue mb-4">Notre proposition</h3>
+                        <div class="bg-sky-50 border-l-4 border-sky-400 p-4 rounded-r-lg flex-grow flex flex-col items-center justify-center">
+                            <i class="fas fa-vial-circle-check text-5xl text-red-600 mb-4"></i>
+                            <p class="font-medium adp-blue text-center text-lg">Nous vous proposons de <strong class="font-bold">valider le lancement de ce projet pilote au S4</strong>, afin de mesurer ensemble et objectivement ses bénéfices avant toute décision de généralisation.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h3 class="text-2xl font-semibold adp-blue mb-4">Calendrier prévisionnel</h3>
+                    <div class="relative">
+                        <div class="absolute top-8 left-0 w-full h-0.5 bg-gray-200"></div>
+                        <div class="grid grid-cols-4 gap-4 text-center relative z-10">
+                            <div>
+                                <div class="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-2 border-4 border-white">
+                                    <i class="fas fa-check-to-slot text-3xl adp-blue"></i>
+                                </div>
+                                <p class="font-semibold adp-blue">Oct 2025</p>
+                                <p class="text-sm text-gray-600">Validation</p>
+                            </div>
+                            
+                            <div>
+                                <div class="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-2 border-4 border-white">
+                                    <i class="fas fa-cogs text-3xl adp-blue"></i>
+                                </div>
+                                <p class="font-semibold adp-blue">Nov-Déc 2025</p>
+                                <p class="text-sm text-gray-600">Préparation</p>
+                            </div>
+                            
+                            <div>
+                                <div class="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-2 border-4 border-white">
+                                    <i class="fas fa-play text-3xl adp-blue"></i>
+                                </div>
+                                <p class="font-semibold adp-blue">Jan 2026</p>
+                                <p class="text-sm text-gray-600">Lancement</p>
+                            </div>
+                            
+                            <div>
+                                <div class="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-2 border-4 border-white">
+                                    <i class="fas fa-chart-pie text-3xl adp-blue"></i>
+                                </div>
+                                <p class="font-semibold adp-blue">Avr-Juin 2026</p>
+                                <p class="text-sm text-gray-600">Évaluation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quote box séparée pour éviter la superposition -->
+                <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
+                    <p class="text-sm italic adp-blue font-medium">« Un projet gagnant-gagnant pour la QVT et la performance opérationnelle. »</p>
+                </div>
+            </main>
+            
+            <footer class="slide-footer">
+                <span class="text-sm">Projet d'évolution SSIAP 24H - ADP</span>
+                <div class="pagination">
+                    <div class="h-6 w-6 rounded-full flex items-center justify-center bg-adp-blue text-white mr-2">
+                        <i class="fas fa-fire-extinguisher text-xs"></i>
+                    </div>
+                    <span class="text-lg font-semibold adp-blue">10 / 10</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const navDots = document.querySelectorAll('.nav-dot');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            // Hide all slides
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Update navigation dots
+            navDots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            // Show current slide
+            slides[index].classList.add('active');
+            navDots[index].classList.add('active');
+            
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Event listeners
+        document.getElementById('nextBtn').addEventListener('click', nextSlide);
+        document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+
 </body>
 </html>
